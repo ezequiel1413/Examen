@@ -5,15 +5,17 @@ export const databaseProvider = [
   {
     provide: 'DATABASE_CONNECTION',
     inject: [ConfigService],
-    useFactory:(config: ConfigService) => {
+    useFactory: (config: ConfigService) => {
       const dataSource = new DataSource({
         type: 'postgres',
-        host: config.get('HOST') ||'localhost',
-        port: +config.get('PORT_DB'),
-        username: config.get('USERNAME') ||'root',
-        password: config.get('PASSWORD')|| 'prueba',
+        host: config.get('HOST') || 'localhost',
+        port: +config.get('PORT'), // 👈 corregido: era 'PORT_DB', ahora 'PORT'
+        username: config.get('USERNAME') || 'root',
+        password: config.get('PASSWORD') || 'prueba',
         database: config.get('DATABASE'),
-        
+        entities: [
+          __dirname + '/../**/*.entity{.ts,.js}',
+        ],
       });
       return dataSource.initialize();
     },
